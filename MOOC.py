@@ -249,7 +249,7 @@ class mooc_spider():
             content_id_list.append(content_id)
         option_dict = {'analyse': '', 'answer': '', 'content': '', 'id': '', 'selectCount': ''}
         aid, tid, tname, end_type = \
-            re.findall('dwr.engine.*?aid:(\d+),.*?tid:(\d+),tname:"(.*?)",type:(\d+)}', text, re.S)[0]
+            re.findall('aid:(\d+).*?tid:(\d+).*?tname:"(.*?)".*?type:(\d+)', text, re.S)[0]
         submit_data = {
             "callCount": '1',
             "scriptSessionId": '${scriptSessionId}190',
@@ -439,6 +439,8 @@ class mooc_spider():
         url = "https://www.icourse163.org/dwr/call/plaincall/MocQuizBean.getQuizPaperDto.dwr"
         response = self.session.post(url=url, data=data)
         text = response.text.encode('utf-8').decode('unicode-escape')
+        text = re.sub(r'&lrm;|&#8205;|&rlm;|&#8203;|&#8204;', '', text)
+
 
         '''题目处理'''
         # 题目信息截取
